@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">T\'s Emoji Picker</string>
     <string name="button_ok">OK</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="msg_limit">Limit 20 chars.</string>
+    <string name="button_cancel">キャンセル</string>
+    <string name="msg_limit">最大で20文字までです。</string>
 </resources>
