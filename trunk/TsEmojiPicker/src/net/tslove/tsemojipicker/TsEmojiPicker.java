@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.ClipboardManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -54,10 +55,18 @@ public class TsEmojiPicker extends Activity {
 			}
 			
 			Toast.makeText(TsEmojiPicker.this, result, Toast.LENGTH_SHORT).show();
-			
+
 			Intent data = new Intent();
-			data.putExtra(REPLACE_KEY, result.toString());
-			setResult(RESULT_OK, data);
+	        Intent it = getIntent();
+			String action = it.getAction();
+			if (action != null && ACTION_INTERCEPT.equals(action)) {
+				data.putExtra(REPLACE_KEY, result.toString());
+				setResult(RESULT_OK, data);
+
+			} else {
+				ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				cm.setText(result.toString());
+			}
 
 			finish();
 		}
@@ -87,7 +96,7 @@ public class TsEmojiPicker extends Activity {
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 			if (mEmojiString.size() < 20) {
 				ImageView imageView = new ImageView(v.getContext());
-				imageView.setLayoutParams(new GridView.LayoutParams(20, 20));
+				imageView.setLayoutParams(new GridView.LayoutParams(40, 40));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				imageView.setBackgroundColor(Color.WHITE);
 
@@ -99,8 +108,7 @@ public class TsEmojiPicker extends Activity {
 				imageView.setImageResource(mThumbIds[position]);
 				chooseEmoji.addView(imageView);
 			} else {
-				// TODO: •¶Žš—ñƒŠƒ\[ƒX‰»
-				Toast.makeText(TsEmojiPicker.this, "‚±‚êˆÈã‚ÍŠ¨•Ù‚µ‚Ä‰º‚³‚¢", Toast.LENGTH_SHORT).show();
+				Toast.makeText(TsEmojiPicker.this, R.string.msg_limit, Toast.LENGTH_SHORT).show();
 			}
 		}
     };
