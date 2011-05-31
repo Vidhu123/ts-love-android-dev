@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">T\'s Emoji Picker</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">キャンセル</string>
+    <string name="msg_limit">最大で20文字までです。</string>
+</resources>
