@@ -1,0 +1,5 @@
+独自ドメイン取るほどのことでもないので、[http://www.java-conf.gr.jp/wg_bof/package/index.html: Package BOF Home Page]でとってきました。
+
+パッケージ名: jp.gr.java_conf.tslove._subpackage_
+
+_subpackage_ の所は各アプリごとで。
