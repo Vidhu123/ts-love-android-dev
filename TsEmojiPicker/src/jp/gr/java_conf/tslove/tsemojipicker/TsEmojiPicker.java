@@ -54,8 +54,6 @@ public class TsEmojiPicker extends Activity {
 				result.append(mEmojiString.get(i));
 			}
 			
-			Toast.makeText(TsEmojiPicker.this, result, Toast.LENGTH_SHORT).show();
-
 			Intent data = new Intent();
 	        Intent it = getIntent();
 			String action = it.getAction();
