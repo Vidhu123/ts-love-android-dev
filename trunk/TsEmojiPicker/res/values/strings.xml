@@ -4,4 +4,5 @@
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
     <string name="msg_limit">Limit 20 chars.</string>
+    <string name="msg_copy">Copy to the clipboard.</string>
 </resources>
