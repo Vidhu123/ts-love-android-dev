@@ -50,22 +50,24 @@ public class TsEmojiPicker extends Activity {
 		public void onClick(View v) {
 			StringBuffer result = new StringBuffer();
 			Integer i;
-			for (i = 0; i < mEmojiString.size(); i++) {
-				result.append(mEmojiString.get(i));
-			}
-			
-			Intent data = new Intent();
-	        Intent it = getIntent();
-			String action = it.getAction();
-			if (action != null && ACTION_INTERCEPT.equals(action)) {
-				data.putExtra(REPLACE_KEY, result.toString());
-				setResult(RESULT_OK, data);
+			if (mEmojiString.size() > 0) {
+				for (i = 0; i < mEmojiString.size(); i++) {
+					result.append(mEmojiString.get(i));
+				}
 
-			} else {
-				ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-				cm.setText(result.toString());
-			}
+				Intent data = new Intent();
+				Intent it = getIntent();
+				String action = it.getAction();
+				if (action != null && ACTION_INTERCEPT.equals(action)) {
+					data.putExtra(REPLACE_KEY, result.toString());
+					setResult(RESULT_OK, data);
 
+				} else {
+					ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+					cm.setText(result.toString());
+					Toast.makeText(TsEmojiPicker.this, R.string.msg_copy, Toast.LENGTH_SHORT).show();
+				}
+			}
 			finish();
 		}
 	};
@@ -94,9 +96,10 @@ public class TsEmojiPicker extends Activity {
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 			if (mEmojiString.size() < 20) {
 				ImageView imageView = new ImageView(v.getContext());
-				imageView.setLayoutParams(new GridView.LayoutParams(40, 40));
+				imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				imageView.setBackgroundColor(Color.WHITE);
+	            imageView.setPadding(5, 5, 5, 5);
 
 				LinearLayout chooseEmoji = (LinearLayout) findViewById(R.id.linearLayoutChooseEmoji);
 
