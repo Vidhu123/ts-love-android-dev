@@ -5,4 +5,6 @@
     <string name="button_cancel">Cancel</string>
     <string name="msg_limit">Limit 20 chars.</string>
     <string name="msg_copy">Copy to the clipboard.</string>
+    <string name="text_recent">Recent use</string>
+    <string name="text_list">List</string>
 </resources>
