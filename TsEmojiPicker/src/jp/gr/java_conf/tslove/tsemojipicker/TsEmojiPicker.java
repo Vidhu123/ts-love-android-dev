@@ -1,9 +1,11 @@
 package jp.gr.java_conf.tslove.tsemojipicker;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.ClipboardManager;
@@ -12,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -20,27 +23,68 @@ import android.widget.AdapterView.OnItemClickListener;
 public class TsEmojiPicker extends Activity {
 	private static final String ACTION_INTERCEPT = "com.adamrocker.android.simeji.ACTION_INTERCEPT";
 	private static final String REPLACE_KEY = "replace_key";
+	public static final String PREFS_RECENT = "RecentChar";
 	private String mReplaceString;
-
+	private LinkedList <Integer> mRecent;
+	private LinkedList <Integer> mInitRecent;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // ê›íËÇÃïúå≥
+        mRecent = new LinkedList<Integer>();
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        String recentStr = prefs.getString(PREFS_RECENT, "");
+        if (recentStr.length() > 0) {
+        	String[] recent = recentStr.split(",");
+        	for (int i = 0; i < recent.length; i++) {
+        		mRecent.add(new Integer(recent[i]));
+        	}
+        }
+        mInitRecent = (LinkedList<Integer>) mRecent.clone();
+        
         Intent it = getIntent();
 		String action = it.getAction();
-
 		if (action != null && ACTION_INTERCEPT.equals(action)) {
 			/* SimejiÇ©ÇÁåƒèoÇ≥ÇÍÇΩéû */
 			mReplaceString = it.getStringExtra(REPLACE_KEY);// íuä∑å≥ÇÃï∂éöÇéÊìæ
 		}
+
 		setContentView(R.layout.main);
 		((Button) findViewById(R.id.buttonOk)).setOnClickListener(mOkListener);
 		((Button) findViewById(R.id.buttonCancel)).setOnClickListener(mCancelListener);
-		((Button) findViewById(R.id.buttonBS)).setOnClickListener(mBSListener);
-        GridView gridview = (GridView) findViewById(R.id.gridViewEmoji);
-        gridview.setAdapter(new ImageAdapter(this));
-        gridview.setOnItemClickListener(mItenClickListener);
+		((ImageButton) findViewById(R.id.imageButtonBS)).setOnClickListener(mBSListener);
+
+		GridView gridviewEmoji = (GridView) findViewById(R.id.gridViewEmoji);
+        gridviewEmoji.setAdapter(new EmojiAdapter(this));
+        gridviewEmoji.setOnItemClickListener(mItemClickListener);
+
+        if (mRecent.size() > 0 ) {
+        	GridView gridviewRecent = (GridView) findViewById(R.id.gridViewRecent);
+        	gridviewRecent.setAdapter(new RecentAdapter(this, mRecent));
+        	gridviewRecent.setOnItemClickListener(mItemClickListener);
+        }
+    }
+
+    @Override
+    protected void onStop(){
+       super.onStop();
+       StringBuilder entry = new StringBuilder();
+       
+       // ê›íËÇÃï€ë∂
+       for (Integer i = 0; i < mRecent.size(); i++) {
+    	   entry.append(mRecent.get(i));
+    	   if (i < mRecent.size() - 1) {
+    		   entry.append(",");
+    	   }
+       }
+
+       SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+       SharedPreferences.Editor editor = prefs.edit();
+       editor.putString(PREFS_RECENT, entry.toString());
+       editor.commit();
     }
 
     private ArrayList<String> mEmojiString = new ArrayList<String>();
@@ -92,21 +136,33 @@ public class TsEmojiPicker extends Activity {
 		}
 	};
 
-    OnItemClickListener mItenClickListener = new OnItemClickListener() {
+    OnItemClickListener mItemClickListener = new OnItemClickListener() {
 		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+			int c;
+			if (parent == findViewById(R.id.gridViewEmoji)) {
+				c = position;
+			} else {
+				c = mInitRecent.get(position);
+			}
 			if (mEmojiString.size() < 20) {
+				// åãâ ï∂éöóÒÇ…í«â¡
+				mEmojiString.add("[i:" + (c + 1) + "]");
+
+				// RecentÇ÷ÇÃí«â¡
+				if (mRecent.contains(c)) {
+					mRecent.remove(mRecent.indexOf(c));
+				}
+				mRecent.addFirst(c);
+
+				// ëIëåãâ ViewÇ…í«â¡
 				ImageView imageView = new ImageView(v.getContext());
 				imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				imageView.setBackgroundColor(Color.WHITE);
 	            imageView.setPadding(5, 5, 5, 5);
-
 				LinearLayout chooseEmoji = (LinearLayout) findViewById(R.id.linearLayoutChooseEmoji);
-
-				mEmojiString.add("[i:" + (position + 1) + "]");
-
 				mEmojiView.add(imageView);
-				imageView.setImageResource(mThumbIds[position]);
+				imageView.setImageResource(mThumbIds[c]);
 				chooseEmoji.addView(imageView);
 			} else {
 				Toast.makeText(TsEmojiPicker.this, R.string.msg_limit, Toast.LENGTH_SHORT).show();

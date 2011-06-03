@@ -10,10 +10,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 
-public class ImageAdapter extends BaseAdapter {
+public class EmojiAdapter extends BaseAdapter {
     private Context mContext;
 
-    public ImageAdapter(Context c) {
+    public EmojiAdapter(Context c) {
         mContext = c;
     }
 
