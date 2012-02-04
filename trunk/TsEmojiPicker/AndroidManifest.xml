@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="jp.gr.java_conf.tslove.tsemojipicker" android:versionName="0.0.3" android:versionCode="3">
+      package="jp.gr.java_conf.tslove.tsemojipicker" android:versionName="0.0.5" android:versionCode="5">
 <supports-screens android:anyDensity="true"></supports-screens>
 <uses-sdk android:minSdkVersion="4"></uses-sdk>
 
