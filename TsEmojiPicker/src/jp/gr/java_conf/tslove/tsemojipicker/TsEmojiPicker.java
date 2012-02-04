@@ -33,7 +33,7 @@ public class TsEmojiPicker extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // İ’è‚Ì•œŒ³
+        // è¨­å®šã®å¾©å…ƒ
         mRecent = new LinkedList<Integer>();
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         String recentStr = prefs.getString(PREFS_RECENT, "");
@@ -48,8 +48,8 @@ public class TsEmojiPicker extends Activity {
         Intent it = getIntent();
 		String action = it.getAction();
 		if (action != null && ACTION_INTERCEPT.equals(action)) {
-			/* Simeji‚©‚çŒÄo‚³‚ê‚½ */
-			mReplaceString = it.getStringExtra(REPLACE_KEY);// ’uŠ·Œ³‚Ì•¶š‚ğæ“¾
+			/* Simejiã‹ã‚‰å‘¼å‡ºã•ã‚ŒãŸæ™‚ */
+			mReplaceString = it.getStringExtra(REPLACE_KEY);// ç½®æ›å…ƒã®æ–‡å­—ã‚’å–å¾—
 		}
 
 		setContentView(R.layout.main);
@@ -63,7 +63,7 @@ public class TsEmojiPicker extends Activity {
 
         if (mRecent.size() > 0 ) {
         	GridView gridviewRecent = (GridView) findViewById(R.id.gridViewRecent);
-        	gridviewRecent.setAdapter(new RecentAdapter(this, mRecent));
+        	gridviewRecent.setAdapter(new RecentAdapter(this, mInitRecent));
         	gridviewRecent.setOnItemClickListener(mItemClickListener);
         }
     }
@@ -73,7 +73,7 @@ public class TsEmojiPicker extends Activity {
        super.onStop();
        StringBuilder entry = new StringBuilder();
        
-       // İ’è‚Ì•Û‘¶
+       // è¨­å®šã®ä¿å­˜
        for (Integer i = 0; i < mRecent.size(); i++) {
     	   entry.append(mRecent.get(i));
     	   if (i < mRecent.size() - 1) {
@@ -145,16 +145,16 @@ public class TsEmojiPicker extends Activity {
 				c = mInitRecent.get(position);
 			}
 			if (mEmojiString.size() < 20) {
-				// Œ‹‰Ê•¶š—ñ‚É’Ç‰Á
+				// çµæœæ–‡å­—åˆ—ã«è¿½åŠ 
 				mEmojiString.add("[i:" + (c + 1) + "]");
 
-				// Recent‚Ö‚Ì’Ç‰Á
+				// Recentã¸ã®è¿½åŠ 
 				if (mRecent.contains(c)) {
 					mRecent.remove(mRecent.indexOf(c));
 				}
 				mRecent.addFirst(c);
 
-				// ‘I‘ğŒ‹‰ÊView‚É’Ç‰Á
+				// é¸æŠçµæœViewã«è¿½åŠ 
 				ImageView imageView = new ImageView(v.getContext());
 				imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
